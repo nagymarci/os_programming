@@ -118,7 +118,18 @@ void terminal_putchar(char c) {
             --terminal_row;
     }
 }
- 
+/*
+void terminal_putint(int a) {
+    if (a >= 0) {
+        if (a < 10) {
+            terminal_putchar(a + '0');
+        }
+    }
+    else if (a > -10) {
+        terminal_writestring("-" + (-a + '0'));
+    }
+}
+ */
 void terminal_write(const char* data, size_t size) {
     for (size_t i = 0; i < size; i++)
         terminal_putchar(data[i]);
@@ -126,6 +137,19 @@ void terminal_write(const char* data, size_t size) {
  
 void terminal_writestring(const char* data) {
     terminal_write(data, strlen(data));
+}
+
+void terminal_putint(int a) {
+    if (a >= 0) {
+        if (a < 10) {
+            terminal_putchar(a + '0');
+            return;
+        }
+    }
+    else if (a > -10) {
+        terminal_putchar('-');
+        terminal_putchar((-a) + '0');
+    }
 }
  
 #if defined(__cplusplus)
@@ -135,12 +159,18 @@ void kernel_main(void) {
     /* Initialize terminal interface */
     terminal_initialize();
  
-    int i = 0;
-    while (i < 6) {
-        terminal_writestring("Hello, kernel World!\n");
-        terminal_writestring("Hello, kernel World!\n");
-        terminal_writestring("Hello\nbello!\n");
-        terminal_writestring("Hello\ttab\n");
-        ++i;
+//    terminal_putchar(1);
+
+    for (int i = -9; i < 10; ++i) {
+        terminal_putint(i);
+        terminal_putchar('\n');
     }
+//    int i = 0;
+//    while (i < 6) {
+//        terminal_writestring("Hello, kernel World!\n");
+//        terminal_writestring("Hello, kernel World!\n");
+//        terminal_writestring("Hello\nbello!\n");
+//        terminal_writestring("Hello\ttab\n");
+//        ++i;
+//    }
 }
