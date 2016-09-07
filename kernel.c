@@ -85,7 +85,14 @@ void terminal_putchar(char c) {
     if (c == '\n') {
         ++terminal_row;
         terminal_column = 0;
-        terminal_putentryat(';', terminal_color, terminal_column, terminal_row);
+        return;
+    }
+    if (c == '\t') {
+        size_t tc = terminal_column;
+        terminal_column = (terminal_column + 4) % VGA_WIDTH;
+        if (terminal_column < tc) {
+            ++terminal_row;
+        }
         return;
     }
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
@@ -114,4 +121,7 @@ void kernel_main(void) {
  
     /* Newline support is left as an exercise. */
     terminal_writestring("Hello, kernel World!\n");
+    terminal_writestring("Hello, kernel World!\n");
+    terminal_writestring("Hello\nbello!\n");
+    terminal_writestring("Hello\ttab\n");
 }
