@@ -15,6 +15,8 @@
 #if !defined(__i386__)
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
+
+#include <limits.h>
  
 /* Hardware text mode color constants. */
 enum vga_color {
@@ -104,9 +106,10 @@ void terminal_putchar(char c) {
         size_t tc = terminal_column;
         terminal_column = (terminal_column + 4) % VGA_WIDTH;
         if (terminal_column < tc) {
-            if (++terminal_row == VGA_HEIGHT)
+            if (++terminal_row == VGA_HEIGHT) {
                 terminal_scroll();
                 --terminal_row;
+            }
         }
         return;
     }
@@ -114,22 +117,13 @@ void terminal_putchar(char c) {
     if (++terminal_column == VGA_WIDTH) {
         terminal_column = 0;
         if (++terminal_row == VGA_HEIGHT)
+        {
             terminal_scroll();
             --terminal_row;
-    }
-}
-/*
-void terminal_putint(int a) {
-    if (a >= 0) {
-        if (a < 10) {
-            terminal_putchar(a + '0');
         }
     }
-    else if (a > -10) {
-        terminal_writestring("-" + (-a + '0'));
-    }
 }
- */
+
 void terminal_write(const char* data, size_t size) {
     for (size_t i = 0; i < size; i++)
         terminal_putchar(data[i]);
@@ -140,16 +134,37 @@ void terminal_writestring(const char* data) {
 }
 
 void terminal_putint(int a) {
-    if (a >= 0) {
-        if (a < 10) {
-            terminal_putchar(a + '0');
-            return;
+    bool l = false;
+    if (a < 0) {
+        terminal_putchar('-');
+
+        //if the number is the lowest, then we have to print its
+        //opponent plus one. So we set l = true here
+        if (a == INT_MIN) {
+            l = true;
+            a = -(a + 1);
+        }
+        else {
+            a = -(a);
         }
     }
-    else if (a > -10) {
-        terminal_putchar('-');
-        terminal_putchar((-a) + '0');
+
+    int* nums = (int*) 0x1;
+    size_t i = 0;
+    while (a != 0) {
+        nums[i] = a % 10;
+        a = a / 10;
+        ++i;
     }
+
+    if (l)
+        ++nums[0];
+
+    for (size_t j = i - 1; j < i; --j) {
+        terminal_putchar(nums[j] + '0');
+    }
+      
+    return;
 }
  
 #if defined(__cplusplus)
@@ -159,18 +174,7 @@ void kernel_main(void) {
     /* Initialize terminal interface */
     terminal_initialize();
  
-//    terminal_putchar(1);
-
-    for (int i = -9; i < 10; ++i) {
-        terminal_putint(i);
-        terminal_putchar('\n');
-    }
-//    int i = 0;
-//    while (i < 6) {
-//        terminal_writestring("Hello, kernel World!\n");
-//        terminal_writestring("Hello, kernel World!\n");
-//        terminal_writestring("Hello\nbello!\n");
-//        terminal_writestring("Hello\ttab\n");
-//        ++i;
-//    }
+    terminal_putint(10);
+    terminal_putchar('\n');
+    terminal_putint(-10);
 }
