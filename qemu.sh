@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
-. ./iso.sh
+. $REPO_ROOT/iso.sh
 
 qemu-system-$(./target-triplet-to-arch.sh $HOST) -cdrom myos.iso

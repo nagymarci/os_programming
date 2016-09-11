@@ -1,8 +1,8 @@
-SYSTEM_HEADER_PROJECTS="libc kernel"
-PROJECTS="libc kernel"
+SYSTEM_HEADER_PROJECTS="$REPO_ROOT/libc $REPO_ROOT/kernel"
+PROJECTS="$REPO_ROOT/libc $REPO_ROOT/kernel"
 
 export MAKE=${MAKE:-make}
-export HOST=${HOST:-$(./default-host.sh)}
+export HOST=${HOST:-$($REPO_ROOT/default-host.sh)}
 
 export AR=${HOST}-ar
 export AS=${HOST}-as
