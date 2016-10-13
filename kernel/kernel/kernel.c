@@ -4,5 +4,6 @@
 
 void kernel_main(void) {
 	terminal_initialize();
-	printf("Hello, kernel World!\n");
+	//int buff[50];
+	printf("Hello, kernel World %d!\n", 10);
 }

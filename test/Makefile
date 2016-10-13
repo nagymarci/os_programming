@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O2 -g -ffreestanding -Wall -Wextra -v
+CFLAGS = -O2 -g -ffreestanding -Wall -Wextra -std=gnu99 -v
 INCLUDES = -Iembunit/ -I../kernel/include/ -I../libc/include/
 #INCLUDES = $(foreach d, $(INCLUDE_DIRS), -I$d)
 LIBS = embunit/lib
